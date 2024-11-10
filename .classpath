@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="service-banque/src/main/java"/>
+	<classpathentry kind="src" path="service-banque/src/test/java"/>
+	<classpathentry kind="src" path="service-config/src/main/java"/>
+	<classpathentry kind="src" path="service-config/src/test/java"/>
+	<classpathentry kind="src" path="service-demande/src/main/java"/>
+	<classpathentry kind="src" path="service-demande/src/test/java"/>
+	<classpathentry kind="src" path="service-proxy/src/main/java"/>
+	<classpathentry kind="src" path="service-proxy/src/test/java"/>
+	<classpathentry kind="src" path="service-register/src/main/java"/>
+	<classpathentry kind="src" path="service-register/src/test/java"/>
+	<classpathentry kind="src" path="service-users/src/main/java"/>
+	<classpathentry kind="src" path="service-users/src/test/java"/>
+	<classpathentry kind="lib" path="service-users/target/service-users.jar"/>
+	<classpathentry kind="output" path="service-banque/target/classes"/>
+</classpath>
