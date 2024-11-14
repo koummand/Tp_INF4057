@@ -1,7 +1,5 @@
 package com.m1fonda.demande.model;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,7 +16,7 @@ public class Demande {
 	private String cni;
 	private String phoneNumber;
 	private String password;
-	private LocalDateTime dateDemande;
+	private String dateDemande;
 	private String typeBanque;
 	private String action ="CREATION_COMPTE";
 	
@@ -31,7 +29,7 @@ public class Demande {
 
 	
    public Demande(int id, int clientId, String nom, String cni, String phoneNumber, String password,
-			LocalDateTime dateDemande, String typeBanque, String action) {
+			String dateDemande, String typeBanque, String action) {
 		super();
 		this.id = id;
 		this.clientId = clientId;
@@ -95,11 +93,11 @@ public class Demande {
 		this.password = password;
 	}
 
-	public LocalDateTime getDateDemande() {
+	public String getDateDemande() {
 		return dateDemande;
 	}
 
-	public void setDateDemande(LocalDateTime dateDemande) {
+	public void setDateDemande(String dateDemande) {
 		this.dateDemande = dateDemande;
 	}
 

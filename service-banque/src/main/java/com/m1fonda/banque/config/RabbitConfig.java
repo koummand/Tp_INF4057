@@ -43,7 +43,7 @@ public class RabbitConfig {
 
 	@Bean
 	public Queue demandeQueue() {
-		return new Queue("demandeQueue", true, false, false);//creer la queue de la demande si celle ci n'existe pas
+		return new Queue("demandeQueue", true, false, false);//creer la queue de la demande si celle ci n existe pas
 	}
 
 	@Bean

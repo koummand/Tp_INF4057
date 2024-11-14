@@ -43,7 +43,7 @@ public class RabbitConfig {
 
 	@Bean
 	public Queue banqueQueue() {
-		return new Queue("banqueQueue", true, false, false); // on creer la queue de la banque si elle n'existe pas
+		return new Queue("banqueQueue", true, false, false); // on creer la queue de la banque si elle n existe pas
 	}
 
 	@Bean

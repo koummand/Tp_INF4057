@@ -7,36 +7,44 @@ import lombok.ToString;
 @ToString
 public class BanqueEvent {
 
-	@JsonProperty("numBanque")
-	private String numBanque;
-	@JsonProperty("typeBanque")
-	private String typeBanque;
+@JsonProperty("clientId")
+private int clientId;
+@JsonProperty("numBanque")
+private String numBanque;
+@JsonProperty("typeBanque")
+private String typeBanque;
 
-	public BanqueEvent() {
-		super();
-	}
+public BanqueEvent() {
+super();
+}
 
-	public BanqueEvent(String numBanque, String typeBanque) {
-		super();
+public BanqueEvent(int clientId, String numBanque, String typeBanque) {
+super();
+this.clientId=clientId;
+this.numBanque = numBanque;
+this.typeBanque = typeBanque;
+}
 
-		this.numBanque = numBanque;
-		this.typeBanque = typeBanque;
-	}
+public String getNumBanque() {
+return numBanque;
+}
 
-	public String getNumBanque() {
-		return numBanque;
-	}
+public void setNumBanque(String numBanque) {
+this.numBanque = numBanque;
+}
+public int getClientId(){
+return clientId;
+}
 
-	public void setNumBanque(String numBanque) {
-		this.numBanque = numBanque;
-	}
-
-	public String getTypeBanque() {
-		return typeBanque;
-	}
-
-	public void setTypeBanque(String typeBanque) {
-		this.typeBanque = typeBanque;
-	}
+public void setClientId(int clientId){
+this.clientId=clientId;
+}
+public void setTypeBanque(String typeBanque){
+this.typeBanque=typeBanque;
+}
+public String getTypeBanque() {
+return typeBanque;
+}
 
 }
+

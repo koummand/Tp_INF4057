@@ -13,9 +13,8 @@ import com.m1.fonda.service.TransactionService;
 @RestController
 @RequestMapping("/api/transaction")
 public class TransactionController {
-	// TransactionController.java
 
-	private final TransactionService transactionService;
+	private TransactionService transactionService;
 
 	public TransactionController(TransactionService transactionService) {
 		this.transactionService = transactionService;
@@ -25,6 +24,8 @@ public class TransactionController {
 	@PostMapping("/depot")
 	public String effectuerDepot(@RequestBody Transaction transaction) {
 		String accountId = transaction.getAccount_id();
+		float amount = transaction.getAmount();
+        transaction.setMontant(new BigDecimal(amount));
 		BigDecimal montant = transaction.getMontant();
 
 		transactionService.effectuerDepot(accountId, montant);
@@ -37,6 +38,8 @@ public class TransactionController {
 
 		try {
 			String accountId = transaction.getAccount_id();
+			float amount = transaction.getAmount();
+	        transaction.setMontant(new BigDecimal(amount));
 			BigDecimal montant = transaction.getMontant();
 			transactionService.effectuerRetrait(accountId, montant);
 			return "Retrait effectué avec succès";

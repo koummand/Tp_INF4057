@@ -23,7 +23,6 @@ public class UserController {
 	// save user
 	@PostMapping("/adduser")
 	public List<Userbanque> addUserController(@RequestBody Userbanque user) {
-		user.setCompteActif(true);
 		userService.addUsers(user);
 		userService.getAllUsers();
 		return userService.getAllUsers();

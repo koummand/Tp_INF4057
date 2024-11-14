@@ -11,16 +11,18 @@ public class Transaction {
 	private String transaction_id;
 	private String account_id;
 	private BigDecimal montant;
+	private float amount;
 	private String Type_transaction;
 
 	public Transaction() {
 		super();
 	}
-	public Transaction(String transaction_id, String account_id, BigDecimal montant, String type_transaction) {
+	public Transaction(String transaction_id, String account_id, BigDecimal montant,float amount, String type_transaction) {
 		super();
 		this.transaction_id = transaction_id;
 		this.account_id = account_id;
 		this.montant = montant;
+		this.amount=amount;
 		this.Type_transaction = type_transaction;
 	}
 
@@ -35,6 +37,12 @@ public class Transaction {
 	}
 	public void setAccount_id(String account_id) {
 		this.account_id = account_id;
+	}
+	public float getAmount() {
+		return amount;
+	}
+	public void setAmount(float amount) {
+		this.amount=amount;
 	}
 	public BigDecimal getMontant() {
 		return montant;

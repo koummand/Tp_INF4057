@@ -1,6 +1,5 @@
 package com.m1fonda.banque.event;
 
-import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -20,12 +19,12 @@ public class DemandeEvent {
 	@JsonProperty("password")
 	private String password;
 	@JsonProperty("dateDemande")
-	private LocalDateTime dateDemande;
+	private String dateDemande;
 	@JsonProperty("typeBanque")
 	private String typeBanque;
 
 	public DemandeEvent(int clientId, String nom, String cni, String phoneNumber, String password,
-			LocalDateTime dateDemande, String typeBanque) {
+			String dateDemande, String typeBanque) {
 		super();
 		this.clientId = clientId;
 		this.nom = nom;
@@ -80,11 +79,11 @@ public class DemandeEvent {
 		this.password = password;
 	}
 
-	public LocalDateTime getDateDemande() {
+	public String getDateDemande() {
 		return dateDemande;
 	}
 
-	public void setDateDemande(LocalDateTime dateDemande) {
+	public void setDateDemande(String dateDemande) {
 		this.dateDemande = dateDemande;
 	}
 	public String getTypeBanque() {

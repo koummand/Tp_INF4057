@@ -15,6 +15,8 @@ public class TransactionEvent {
 	private String account_id;
 	@JsonProperty("montant")
 	private BigDecimal montant;
+	@JsonProperty("amount")
+	private float amount;
 	@JsonProperty("Type_transaction")
 	private String Type_transaction;
 
@@ -22,11 +24,12 @@ public class TransactionEvent {
 		super();
 	}
 
-	public TransactionEvent(String transaction_id, String account_id, BigDecimal montant, String type_transaction) {
+	public TransactionEvent(String transaction_id, String account_id, BigDecimal montant,float amount, String type_transaction) {
 		super();
 		this.transaction_id = transaction_id;
 		this.account_id = account_id;
 		this.montant = montant;
+		this.amount = amount;
 		Type_transaction = type_transaction;
 	}
 
@@ -49,9 +52,19 @@ public class TransactionEvent {
 	public BigDecimal getMontant() {
 		return montant;
 	}
+	
 
 	public void setMontant(BigDecimal montant) {
 		this.montant = montant;
+	}
+
+	public float getAmount() {
+		return amount;
+	}
+	
+
+	public void setAmount(float amount) {
+		this.amount = amount;
 	}
 
 	public String getType_transaction() {
