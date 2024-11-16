@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+
 @Entity
 public class Compte {
 
@@ -11,13 +12,13 @@ public class Compte {
 	private String account_id;
 	private int clientId;
 	private String typeBanque;
-	private BigDecimal solde;
+	private float solde;
 
 	public Compte() {
 		super();
 	}
 
-	public Compte(String account_id, int clientId, String typeBanque, BigDecimal solde) {
+	public Compte(String account_id, int clientId, String typeBanque, float solde) {
 		super();
 		this.account_id = account_id;
 		this.clientId = clientId;
@@ -49,16 +50,16 @@ public class Compte {
 		this.typeBanque = typeBanque;
 	}
 
-	public BigDecimal getSolde() {
+	public float getSolde() {
 		return solde;
 	}
 
-	public void setSolde(BigDecimal solde) {
+	public void setSolde(float solde) {
 		this.solde = solde;
 	}
 
-	public void miseAjourSolde(BigDecimal montant) {
-		this.solde = this.solde.add(montant);
+	public void miseAjourSolde(float montant) {
+		this.solde = this.solde + montant;
 	}
 
 }

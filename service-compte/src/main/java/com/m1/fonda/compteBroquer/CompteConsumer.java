@@ -6,36 +6,39 @@ import org.springframework.stereotype.Service;
 
 import com.m1.fonda.event.CompteEvent;
 import com.m1.fonda.event.TransactionEvent;
-import com.m1.fonda.model.Compte;
 import com.m1.fonda.service.CompteService;
 
 @Service
 public class CompteConsumer {
 
-@Autowired
-private CompteService compteService;
+	@Autowired
+	private CompteService compteService;
 
-@RabbitListener(queues = "banqueQueue")
-public void creerCompte(CompteEvent event) {
+	@RabbitListener(queues = "banqueQueue")
+	public void creerCompte(CompteEvent event) {
 
-System.out.println("requete recu pour creation de  compte ");
+		System.out.println("requete recu pour creation de  compte " + event);
 
-compteService.creerCompte(event.getClientId(), event.getTypeBanque());
+		compteService.creerComptes(event.getClientId(), event.getTypeBanque());
 
-}
+	}
 
-@RabbitListener(queues = "transactionQueue")
-public void effectuerDepot(TransactionEvent event) {
+	@RabbitListener(queues = "transactionQueue")
+	public void effectuerTransaction(TransactionEvent event) {
+		if ("DEPOSIT".equals(event.getType_transaction())) {
 
-compteService.effectuerDepot(event);
+			System.out.println("requete recu pour effectuer un depot dans compte " + event);
+			compteService.effectuerDepot(event);
 
-}
+		} else if ("WITHDRAWAL".equals(event.getType_transaction())) {
 
-@RabbitListener(queues = "transactionQueue")
-public void effectuerRetrait(TransactionEvent event) {
+			System.out.println("requete recu pour effectuer un retait dans compte " + event);
+			compteService.effectuerRetrait(event);
 
-compteService.effectuerRetrait(event);
+		} else {
+			System.out.println("Type d'opération non reconnu : " + event.getType_transaction());
+		}
 
-}
+	}
 
 }

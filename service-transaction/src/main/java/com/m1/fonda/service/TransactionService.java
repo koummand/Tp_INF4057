@@ -13,16 +13,16 @@ import com.m1.fonda.transactionRepository.TransactionRepository;
 @Service
 public class TransactionService {
 
-//	@Autowired
-//	private final RestTemplate restTemplate;
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
 	@Autowired
 	private TransactionRepository transactionRepository;
 
-	public Transaction effectuerDepot(String accountId, BigDecimal montant) {
-
-		// Crée et enregistre la transaction
+	public Transaction effectuerDepot(String accountId, float montant) throws Exception {
+		if (accountId == null) {
+			throw new IllegalArgumentException("Événement de depot invalide.");
+		}
+// Crée et enregistre la transaction
 		Transaction transaction = new Transaction();
 
 		transaction.setTransaction_id("depot_" + accountId);
@@ -30,36 +30,40 @@ public class TransactionService {
 		transaction.setMontant(montant);
 		transaction.setType_transaction("DEPOSIT");
 
-		TransactionEvent transactionEvent = new TransactionEvent();
-
-		transactionEvent.setTransaction_id(transaction.getTransaction_id());
-		transactionEvent.setAccount_id(transaction.getAccount_id());
-		transactionEvent.setMontant(transaction.getMontant());
-		transactionEvent.setType_transaction(transaction.getType_transaction());
-	
-		rabbitTemplate.convertAndSend("transactionExchange", "transaction.created", transactionEvent);
 		Transaction transactionrepos = transactionRepository.save(transaction);
 
-		return transactionrepos;
+		TransactionEvent transactionEvent = new TransactionEvent();
+
+		transactionEvent.setTransaction_id(transactionrepos.getTransaction_id());
+		transactionEvent.setAccount_id(transactionrepos.getAccount_id());
+		transactionEvent.setMontant(transactionrepos.getMontant());
+		transactionEvent.setType_transaction(transactionrepos.getType_transaction());
+
+		System.out.println("envoie de la requete de depot vers le service compte " + transactionEvent);
+		rabbitTemplate.convertAndSend("transactionExchange", "transaction.created", transactionEvent);
+        return transactionrepos;
 	}
 
-	public Transaction effectuerRetrait(String accountId, BigDecimal montant) throws Exception {
-
+	public Transaction effectuerRetrait(String accountId, float montant) throws Exception {
+		if (accountId == null) {
+			throw new IllegalArgumentException("Événement de retrait invalide.");
+		}
 		Transaction transaction = new Transaction();
 		transaction.setTransaction_id("retrait_" + accountId);
 		transaction.setAccount_id(accountId);
-		transaction.setMontant(montant.negate());
+		transaction.setMontant(-montant);
 		transaction.setType_transaction("WITHDRAWAL");
 
-		TransactionEvent transactionEvent = new TransactionEvent();
-		transactionEvent.setTransaction_id(transaction.getTransaction_id());
-		transactionEvent.setAccount_id(transaction.getAccount_id());
-		transactionEvent.setMontant(transaction.getMontant());
-		transactionEvent.setType_transaction(transaction.getType_transaction());
-
-		rabbitTemplate.convertAndSend("transactionExchange", "transaction.created", transactionEvent);
 		Transaction transactionrepos = transactionRepository.save(transaction);
-		return transactionrepos;
 
+		TransactionEvent transactionEvent = new TransactionEvent();
+		transactionEvent.setTransaction_id(transactionrepos.getTransaction_id());
+		transactionEvent.setAccount_id(transactionrepos.getAccount_id());
+		transactionEvent.setMontant(transactionrepos.getMontant());
+		transactionEvent.setType_transaction(transactionrepos.getType_transaction());
+
+		System.out.println("envoie de la requete de retrait vers le service compte " + transactionEvent);
+		rabbitTemplate.convertAndSend("transactionExchange", "transaction.created", transactionEvent);
+		return transactionrepos;
 	}
 }

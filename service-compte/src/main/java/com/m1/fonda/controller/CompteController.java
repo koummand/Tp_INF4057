@@ -1,7 +1,6 @@
 package com.m1.fonda.controller;
 
-import java.math.BigDecimal;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,28 +14,24 @@ import com.m1.fonda.service.CompteService;
 @RequestMapping("/api/comptes")
 public class CompteController {
 
-	// CompteController.java
+	@Autowired
+	private CompteService compteService;
 
-	private final CompteService compteService;
-
-	public CompteController(CompteService compteService) {
-		this.compteService = compteService;
-	}
 
 	@GetMapping("/{accountId}/solde")
-	public BigDecimal getSolde(@PathVariable String accountId) {
+	public float getSolde(@PathVariable String accountId) {
 		return compteService.getSolde(accountId);
 	}
 
 	@PutMapping("/{accountId}/solde")
-	public String miseAJourSolde(@PathVariable String accountId, @PathVariable BigDecimal montant) {
+	public String miseAJourSolde(@PathVariable String accountId, @PathVariable float montant) {
 		compteService.miseAJourSolde(accountId, montant);
 		return "Solde mis à jour avec succès";
 	}
- 
+
 	@PutMapping("/{userId}/compte")
 	public Compte creerCompte(@PathVariable int userId, @PathVariable String bankType) {
-		Compte compte = compteService.creerCompte(userId, bankType);
+		Compte compte = compteService.creerComptes(userId, bankType);
 		return compte;
 	}
 }

@@ -13,21 +13,21 @@ import com.serviceusers.repository.UserRepository;
 @Service
 public class UserService {
 
-// Qunad tu enregistre publie l'evenement
+// Qunad tu enregistre publie l evenement
 @Autowired
 UserRepository userRepo;
 
-// on utlise RabbitTemplate pour publier l'evenenment
+// on utlise RabbitTemplate pour publier l evenenment
 @Autowired
 private RabbitTemplate rabbitTemplate;
 
-// Qunad tu enregistre un utilisateur publie l'evenement
+// Qunad tu enregistre un utilisateur publie l evenement
 public void addUsers(Userbanque user) {
 
 try {
 // Enregistrer un user
-Userbanque saveUser = userRepo.save(user);
 user.setCompteActif(true);
+Userbanque saveUser = userRepo.save(user);
 // Publier les evenemt
 UserEvent event = new UserEvent();
 
@@ -57,7 +57,7 @@ public List<Userbanque> getAllUsers() {
 return userRepo.findAll();
 }
 
-// recherche d'un utilisateur
+// recherche d un utilisateur
 public Userbanque getUsers(int id) {
 return userRepo.findById(id).orElse(null);
 

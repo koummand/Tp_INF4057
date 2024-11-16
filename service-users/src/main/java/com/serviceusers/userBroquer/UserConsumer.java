@@ -10,8 +10,6 @@ import com.serviceusers.model.Notification;
 //creation du consommateur pour ecouter ou consommer l evenement
 @Service
 public class UserConsumer {
-//	@Autowired
-//	private UserRepository userRepository;
 
 @RabbitListener(queues = "notificationQueue")
 public void recevoirNotification(NotificationEvent event) {
@@ -24,13 +22,13 @@ notification.setMessage(event.getMessage());
 notification.setDate(event.getDate());
 notification.setStatus(event.getStatus());
 
-System.out.println("Message de validation reçu : " + event);
+System.out.println("Message reçu par l'utilisateur : " + event);
 
-if (notification.getStatus() != null && notification.getStatus().equals("VALIDÉ")) {
-System.out.println(notification.getMessage() + " " + event.getClientId());
-} else {
-System.out.println(notification.getMessage() + " " + event.getClientId());
-}
+// if (notification.getStatus() != null && notification.getStatus().equals("VALIDÉ")) {
+// System.out.println(notification.getMessage() + " " + event.getClientId());
+// } else {
+// System.out.println(notification.getMessage() + " " + event.getClientId());
+// }
 }
 
 }

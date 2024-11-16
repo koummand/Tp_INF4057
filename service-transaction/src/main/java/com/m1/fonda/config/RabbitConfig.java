@@ -15,34 +15,34 @@ import org.springframework.context.annotation.Configuration;
 @EnableRabbit
 public class RabbitConfig {
 
-	@Bean
-	public Jackson2JsonMessageConverter jsonMessageConverter() {
-		return new Jackson2JsonMessageConverter();
-	}
+@Bean
+public Jackson2JsonMessageConverter jsonMessageConverter() {
+return new Jackson2JsonMessageConverter();
+}
 
-	// Configuration de RabbitTemple pour utiliser le convertisseur
-	@Bean
-	public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-		RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+// Configuration de RabbitTemple pour utiliser le convertisseur
+@Bean
+public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
 
-		rabbitTemplate.setMessageConverter(jsonMessageConverter());
+rabbitTemplate.setMessageConverter(jsonMessageConverter());
 
-		return rabbitTemplate;
-	}
+return rabbitTemplate;
+}
 
-	@Bean
-	public TopicExchange transactionExchange() {
-		return new TopicExchange("transactionExchange");
-	}
+@Bean
+public TopicExchange transactionExchange() {
+return new TopicExchange("transactionExchange");
+}
 
-	@Bean
-	public Queue transactionQueue() {
-		return new Queue("transactionQueue"); // Queue durable pour les demandes à valider
-	}
+@Bean
+public Queue transactionQueue() {
+return new Queue("transactionQueue"); // Queue durable pour les demandes à valider
+}
 
-	@Bean
-	public Binding binding(TopicExchange transactionExchange, Queue transactionQueue) {
-		return BindingBuilder.bind(transactionQueue).to(transactionExchange).with("transaction.created");
-	}
+@Bean
+public Binding binding(TopicExchange transactionExchange, Queue transactionQueue) {
+return BindingBuilder.bind(transactionQueue).to(transactionExchange).with("transaction.created");
+}
 
 }

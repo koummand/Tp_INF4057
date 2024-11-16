@@ -1,9 +1,10 @@
 package com.m1fonda.demande.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.time.LocalDateTime;
 
 
 import com.m1fonda.demande.DemandeRepository.DemandeRepository;
@@ -13,7 +14,7 @@ import com.m1fonda.demande.model.Demande;
 @Service
 public class DemandeService {
 @Autowired
-private DemandeRepository demandeRepos;
+private DemandeRepository demandeRepository;
 @Autowired
 private RabbitTemplate rabbitTemplate;
 
@@ -21,17 +22,19 @@ private RabbitTemplate rabbitTemplate;
 public void envoyerDemandeCreationCompte(Demande demande) {
 try {
 demande.setDateDemande(LocalDateTime.now().toString());
+Demande demandeRepos = demandeRepository.save(demande);
+
 DemandeEvent event = new DemandeEvent();
 
-event.setClientId(demande.getClientId());
-event.setNom(demande.getNom());
-event.setCni(demande.getCni());
-event.setPassword(demande.getPassword());
-event.setPhoneNumber(demande.getPhoneNumber());
-event.setTypeBanque(demande.getTypeBanque());
+event.setClientId(demandeRepos.getClientId());
+event.setNom(demandeRepos.getNom());
+event.setCni(demandeRepos.getCni());
+event.setPassword(demandeRepos.getPassword());
+event.setDateDemande(demandeRepos.getDateDemande());
+event.setPhoneNumber(demandeRepos.getPhoneNumber());
+event.setTypeBanque(demandeRepos.getTypeBanque());
+event.setAction(demandeRepos.getAction());
 
-//savegarde la demande
-demandeRepos.save(demande);
 
 // Publier la demande dans la queue "userQueue"
 rabbitTemplate.convertAndSend("demandeExchange", "demande.created", event);

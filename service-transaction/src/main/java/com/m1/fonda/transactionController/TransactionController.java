@@ -1,7 +1,6 @@
 package com.m1.fonda.transactionController;
 
-import java.math.BigDecimal;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,37 +13,32 @@ import com.m1.fonda.service.TransactionService;
 @RequestMapping("/api/transaction")
 public class TransactionController {
 
+	@Autowired
 	private TransactionService transactionService;
-
-	public TransactionController(TransactionService transactionService) {
-		this.transactionService = transactionService;
-	}
 
 //	public String effectuerDepot(@PathVariable String accountId, @PathVariable BigDecimal montant) {
 	@PostMapping("/depot")
-	public String effectuerDepot(@RequestBody Transaction transaction) {
+	public Transaction effectuerDepot(@RequestBody Transaction transaction) throws Exception {
 		String accountId = transaction.getAccount_id();
-		float amount = transaction.getAmount();
-        transaction.setMontant(new BigDecimal(amount));
-		BigDecimal montant = transaction.getMontant();
-
-		transactionService.effectuerDepot(accountId, montant);
-		return "Dépôt effectué avec succès";
+		float montant = transaction.getMontant();
+	
+		Transaction transactionsave = transactionService.effectuerDepot(accountId, montant);
+		return transactionsave;
+//		return "Dépôt effectué avec succès";
 	}
 
 //	public String effectuerRetrait(@PathVariable String accountId, @PathVariable BigDecimal montant) {
 	@PostMapping("/retrait")
-	public String effectuerRetrait(@RequestBody Transaction transaction) {
+	public Transaction effectuerRetrait(@RequestBody Transaction transaction) throws Exception {
 
 		try {
 			String accountId = transaction.getAccount_id();
-			float amount = transaction.getAmount();
-	        transaction.setMontant(new BigDecimal(amount));
-			BigDecimal montant = transaction.getMontant();
-			transactionService.effectuerRetrait(accountId, montant);
-			return "Retrait effectué avec succès";
+			float montant = transaction.getMontant();
+			Transaction transactionsave = transactionService.effectuerRetrait(accountId, montant);
+			return transactionsave;
+//			return "Retrait effectué avec succès";
 		} catch (Exception e) {
-			return "Erreur : " + e.getMessage();
+			throw new IllegalArgumentException("Erreur: "+e.getMessage());
 		}
 	}
 }

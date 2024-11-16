@@ -6,66 +6,57 @@ import org.springframework.stereotype.Service;
 
 import com.m1fonda.banque.event.CompteEvent;
 import com.m1fonda.banque.event.DemandeEvent;
-import com.m1fonda.banque.model.Compte;
 import com.m1fonda.banque.model.Banque;
-import com.m1fonda.banque.model.Userbanque;
+import com.m1fonda.banque.model.Compte;
 import com.m1fonda.banque.repository.BanqueRepository;
 
 @Service
 public class BanqueService {
 
+	@Autowired
+	private BanqueRepository banqueRepository;
+	@Autowired
+	private RabbitTemplate rabbitTemplate;
 
-private BanqueRepository banqueRepository;
+	public boolean validerDemande(DemandeEvent demande) {
 
-private RabbitTemplate rabbitTemplate;
+		Banque banque = new Banque();
+		banque.setClientId(demande.getClientId());
+		banque.setTypeBanque(demande.getTypeBanque());
+		Banque banquerepos = banqueRepository.save(banque);
+		int clientId = banquerepos.getClientId();
 
-public BanqueService(RabbitTemplate rabbitTemplate, BanqueRepository banqueRepository) {
-this.rabbitTemplate = rabbitTemplate;
-this.banqueRepository=banqueRepository;
-}
+		if (clientId == 0) {
+			System.out.println("Utilisateur introuvable");
+			return false; // L'utilisateur n'existe pas
+		}
 
-public boolean validerDemande(DemandeEvent demande) {
+		String typeBanque = banquerepos.getTypeBanque();
+		if (!(typeBanque.equalsIgnoreCase("ORANGE") || typeBanque.equalsIgnoreCase("MTN")
+				|| typeBanque.equalsIgnoreCase("CAMTEL"))) {
 
-Banque banque = new Banque();
-banque.setClientId(demande.getClientId());
-banque.setTypeBanque(demande.getTypeBanque());
-Banque banquerepos= banqueRepository.save(banque);
-int clientId = banquerepos.getClientId();
+			System.out.println("Veuillez choisir parmi les opérateurs suivants : ORANGE, MTN, CAMTEL");
+			return false;
+		}
 
-if (clientId == 0) {
-System.out.println("Utilisateur introuvable");
-return false; // L'utilisateur n'existe pas
-}
+		System.out.println("Demande validée");
+		return true;// Validation réussie
+	}
 
-
-String typeBanque = banquerepos.getTypeBanque();
-if (!(typeBanque.equalsIgnoreCase("ORANGE") || 
-typeBanque.equalsIgnoreCase("MTN") || 
-typeBanque.equalsIgnoreCase("CAMTEL"))) {
-
-System.out.println("Veuillez choisir parmi les opérateurs suivants : ORANGE, MTN, CAMTEL");
-return false;
-}
-
-
-System.out.println("Demande validée");
-return true;// Validation réussie
-}
-
-public void creerCompte(int userId, String bankType) {
+	public void creerCompte(int userId, String bankType) {
 
 // creer et enregistrez le compte
-Compte compte = new Compte();
-compte.setClientId(userId);
-compte.setTypeBanque(bankType);
+		Compte compte = new Compte();
+		compte.setClientId(userId);
+		compte.setTypeBanque(bankType);
 
-CompteEvent comptevent = new CompteEvent();
-comptevent.setClientId(compte.getClientId());
-comptevent.setTypeBanque(compte.getTypeBanque());
-System.out.println("Envoi d'une requette pour la creation de compte : "+ comptevent);
+		CompteEvent comptevent = new CompteEvent();
+		comptevent.setClientId(compte.getClientId());
+		comptevent.setTypeBanque(compte.getTypeBanque());
+		System.out.println("Envoi d'une requette pour la creation de compte : " + comptevent);
 
-rabbitTemplate.convertAndSend("banqueExchange", "banque.created", comptevent);// publication pour la creation
-// d un compte
-}
+		rabbitTemplate.convertAndSend("banqueExchange", "banque.created", comptevent);// publication pour la creation d
+																						// un compte
 
+	}
 }

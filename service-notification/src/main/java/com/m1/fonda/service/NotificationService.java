@@ -18,8 +18,8 @@ private RabbitTemplate rabbitTemplate;
 @Autowired
 private NotificationRepository notificationRepository;
 
-public void receiveNotificationCompte(NotificationEvent event) {
-
+public void processNotification(NotificationEvent event, String source) {
+try{
 Notification notification = new Notification();
 
 notification.setAccount_id(event.getAccount_id());
@@ -31,7 +31,14 @@ notification.setStatus(event.getStatus());
 notificationRepository.save(notification);
 
 // publie la notification vers le client
-System.out.println("envoie de la notification au service utilisateur"+ event);
+System.out.println("Envoi de la notification depuis " + source + " au service utilisateur : " + event);
 rabbitTemplate.convertAndSend("notificationExchange", "notification.created", event);
+}catch(Exception e){
+System.err.println("Erreur lors du traitement de la notification pour la source : " + source);
+e.printStackTrace();
+throw new RuntimeException("Échec du traitement de la notification", e);
 }
+
+}
+
 }

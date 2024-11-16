@@ -14,52 +14,58 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableRabbit
 public class RabbitConfig {
-	// Creer un convertisseur de message pour gerer la sérialisation et la
-	// désérialisation
-	@Bean
-	public Jackson2JsonMessageConverter jsonMessageConverter() {
-		return new Jackson2JsonMessageConverter();
-	}
+// Creer un convertisseur de message pour gerer la sérialisation et la
+// désérialisation
+@Bean
+public Jackson2JsonMessageConverter jsonMessageConverter() {
+return new Jackson2JsonMessageConverter();
+}
 
-	// Configuration de RabbitTemple pour utiliser le convertisseur
-	@Bean
-	public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-		RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+// Configuration de RabbitTemple pour utiliser le convertisseur
+@Bean
+public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
 
-		rabbitTemplate.setMessageConverter(jsonMessageConverter());
+rabbitTemplate.setMessageConverter(jsonMessageConverter());
 
-		return rabbitTemplate;
-	}
+return rabbitTemplate;
+}
 
-	@Bean
-	public TopicExchange notificationExchange() {
-		return new TopicExchange("notificationExchange");
-	}
+@Bean
+public TopicExchange notificationExchange() {
+return new TopicExchange("notificationExchange");
+}
 
-	@Bean
-	public Queue notificationQueue() {
-		return new Queue("notificationQueue"); // Queue durable pour les demandes à valider
-	}
+@Bean
+public Queue notificationQueue() {
+return new Queue("notificationQueue"); // Queue durable pour les demandes à valider
+}
 
-	@Bean
-	public Queue compteQueue() {
-		return new Queue("compteQueue", true, false, false); // on creer la queue du compte si elle n'existe pas
-	}
+@Bean
+public Queue compteQueue() {
+return new Queue("compteQueue", true, false, false); // on creer la queue du compte si elle n existe pas
+}
 
-	@Bean
-	public Queue banqueQueue() {
-		return new Queue("banqueQueue", true, false, false); // on creer la queue de la banque si elle n'existe pas
-	}
+@Bean
+public Queue banqueQueue() {
+return new Queue("banqueQueue", true, false, false); // on creer la queue de la banque si elle n existe pas
+}
 
-	@Bean
-	public Queue transactionQueue() {
-		return new Queue("transactionQueue", true, false, false); // on creer la queue de transaction si elle n'existe
-																	// pas
-	}
+@Bean
+public Queue transactiondepotQueue() {
+return new Queue("transactiondepotQueue", true, false, false); // on creer la queue de transaction si elle n existe
+// pas
+}
 
-	@Bean
-	public Binding binding(TopicExchange notificationExchange, Queue notificationQueue) {
-		return BindingBuilder.bind(notificationQueue).to(notificationExchange).with("notification.created");
-	}
+@Bean
+public Queue transactionretraitQueue() {
+return new Queue("transactionretraitQueue", true, false, false); // on creer la queue de transaction si elle n existe
+// pas
+}
+
+@Bean
+public Binding binding(TopicExchange notificationExchange, Queue notificationQueue) {
+return BindingBuilder.bind(notificationQueue).to(notificationExchange).with("notification.created");
+}
 
 }

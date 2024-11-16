@@ -1,7 +1,5 @@
 package com.m1.fonda.event;
 
-import java.math.BigDecimal;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.ToString;
@@ -14,9 +12,7 @@ public class TransactionEvent {
 	@JsonProperty("account_id")
 	private String account_id;
 	@JsonProperty("montant")
-	private BigDecimal montant;
-	@JsonProperty("amount")
-	private float amount;
+	private float montant;
 	@JsonProperty("Type_transaction")
 	private String Type_transaction;
 
@@ -24,12 +20,11 @@ public class TransactionEvent {
 		super();
 	}
 
-	public TransactionEvent(String transaction_id, String account_id, BigDecimal montant,float amount, String type_transaction) {
+	public TransactionEvent(String transaction_id, String account_id, float montant, String type_transaction) {
 		super();
 		this.transaction_id = transaction_id;
 		this.account_id = account_id;
 		this.montant = montant;
-		this.amount = amount;
 		Type_transaction = type_transaction;
 	}
 
@@ -49,22 +44,12 @@ public class TransactionEvent {
 		this.account_id = account_id;
 	}
 
-	public BigDecimal getMontant() {
+	public float getMontant() {
 		return montant;
 	}
-	
 
-	public void setMontant(BigDecimal montant) {
+	public void setMontant(float montant) {
 		this.montant = montant;
-	}
-
-	public float getAmount() {
-		return amount;
-	}
-	
-
-	public void setAmount(float amount) {
-		this.amount = amount;
 	}
 
 	public String getType_transaction() {
