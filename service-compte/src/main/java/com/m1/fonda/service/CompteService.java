@@ -66,20 +66,17 @@ public class CompteService {
     public void miseAJourSolde(String accountId, float montant) {
         Compte compte = comteRepository.findById(accountId)
                 .orElseThrow(() -> new NoSuchElementException("impossible de mettre a jour le solde Compte non trouvé pour l'ID " + accountId));
-
+        
+         float nouveauSolde = compte.getSolde() + montant;
+	    
+	    // Vérification supplémentaire pour éviter les soldes négatifs
+	    if (nouveauSolde < 0) {
+	        throw new IllegalArgumentException("Solde insuffisant pour effectuer cette opération.");
+	    }
         compte.miseAjourSolde(montant);
 //		comteRepository.updateBalance(montant, accountId);
         comteRepository.save(compte); // Sauvegarde explicite du solde mis à jour
     }
-	
-//	@Transactional
-//	public void miseAJourSolde(String accountId, float montant) {
-//	    Compte compte = comteRepository.findById(accountId)
-//	            .orElseThrow(() -> new NoSuchElementException("impossible de mettre a jour le solde Compte non trouvé pour l'ID " + accountId));
-//
-//	    compte.setSolde(compte.getSolde() + montant);  // Assurez-vous que le solde est mis à jour
-//	    comteRepository.save(compte);  // Sauvegarde explicite du solde mis à jour
-//	}
 
 	public void effectuerDepot(TransactionEvent transactionEvent) {
 		String accountId = transactionEvent.getAccount_id();
@@ -89,8 +86,6 @@ public class CompteService {
 
 			this.miseAJourSolde(accountId, montant);
 //			comteRepository.updateBalance(montant, accountId);
-
-		
 			
 			float nouveauSolde = comteRepository.findById(accountId)
 			        .orElseThrow(() -> new NoSuchElementException("Compte non trouvé pour l'ID " + accountId))
@@ -131,7 +126,7 @@ public class CompteService {
 
 			if (soldeActuel >= montant) {
 
-				this.miseAJourSolde(accountId, montant);
+				this.miseAJourSolde(accountId, -montant);
 //				comteRepository.updateBalance(montant, accountId);
 
 				float nouveauSolde = comteRepository.findById(accountId)

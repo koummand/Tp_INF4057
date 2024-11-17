@@ -51,7 +51,7 @@ public class TransactionService {
 		Transaction transaction = new Transaction();
 		transaction.setTransaction_id("retrait_" + accountId);
 		transaction.setAccount_id(accountId);
-		transaction.setMontant(-montant);
+		transaction.setMontant(montant);
 		transaction.setType_transaction("WITHDRAWAL");
 
 		Transaction transactionrepos = transactionRepository.save(transaction);
